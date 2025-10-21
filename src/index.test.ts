@@ -134,10 +134,10 @@ Setup content here.`;
     const structure = parseWikiStructure("- 1 Overview");
 
     const content =
-      "Error fetching wiki for modelcontextprotocol/typescript-sdkkkk: Repository not found. Visit https://deepwiki.com/modelcontextprotocol/typescript-sdkkkk to index it.";
+      "Error fetching wiki for someNotFoundRepo: Repository not found. Visit https://deepwiki.com/someNotFoundRepo to index it.";
 
     expect(() => splitWikiContents(content, structure)).toThrow(
-      "Error fetching wiki for modelcontextprotocol/typescript-sdkkkk: Repository not found. Visit https://deepwiki.com/modelcontextprotocol/typescript-sdkkkk to index it.",
+      "Error fetching wiki for someNotFoundRepo: Repository not found. Visit https://deepwiki.com/someNotFoundRepo to index it.",
     );
   });
 
