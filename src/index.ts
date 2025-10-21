@@ -152,7 +152,7 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
     // Save structure file
     const structureFile = path.join(outputDir, "_wiki_structure.md");
     fs.writeFileSync(structureFile, structureText, "utf-8");
-    console.log(`✓ Saved structure to ${structureFile}`);
+    console.log(`Saved structure to ${structureFile}`);
 
     // Parse structure
     const structure = parseWikiStructure(structureText);
