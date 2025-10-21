@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
 const MCP_SERVER_URL = "https://mcp.deepwiki.com/mcp";
 
@@ -53,8 +53,8 @@ function parseWikiStructure(structureText: string): WikiStructure {
 function splitWikiContents(contents: string, structure: WikiStructure): Map<string, string> {
   const files = new Map<string, string>();
 
-  // Split by "# Page: " pattern (at the start of a line)
-  const pages = contents.split(/^# Page: /m);
+  // Split by "# Page: " pattern (no newline before it)
+  const pages = contents.split(/# Page: /);
 
   // First element is usually empty or text before first page marker
   if (pages[0].trim()) {
@@ -116,7 +116,7 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
   }
 
   // Create MCP client
-  const transport = new SSEClientTransport(new URL(MCP_SERVER_URL));
+  const transport = new StreamableHTTPClientTransport(new URL(MCP_SERVER_URL));
   const client = new Client(
     {
       name: "deepwiki-dl",
