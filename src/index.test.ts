@@ -100,9 +100,7 @@ describe("splitWikiContents", () => {
 
     const content = `# Page: Overview
 
-This is the overview content.
-
-# Page: Installation
+This is the overview content.# Page: Installation
 
 Installation instructions here.`;
 
@@ -120,7 +118,7 @@ Installation instructions here.`;
 - 2 Setup`);
 
     // Simulating the actual format from deepwiki where there's no newline before # Page:
-    const content = `Some preamble text# Page: Overview
+    const content = `# Page: Overview
 
 Overview content here.# Page: Setup
 
@@ -132,20 +130,15 @@ Setup content here.`;
     expect(result.has("2 Setup.md")).toBe(true);
   });
 
-  it("should save preamble content if present", () => {
+  it("should throw error when content has preamble (error message)", () => {
     const structure = parseWikiStructure("- 1 Overview");
 
-    const content = `This is preamble content before any page markers.
+    const content =
+      "Error fetching wiki for modelcontextprotocol/typescript-sdkkkk: Repository not found. Visit https://deepwiki.com/modelcontextprotocol/typescript-sdkkkk to index it.";
 
-# Page: Overview
-
-Overview content.`;
-
-    const result = splitWikiContents(content, structure);
-
-    expect(result.has("_preamble.md")).toBe(true);
-    expect(result.get("_preamble.md")).toBe("This is preamble content before any page markers.");
-    expect(result.has("1 Overview.md")).toBe(true);
+    expect(() => splitWikiContents(content, structure)).toThrow(
+      "Error fetching wiki for modelcontextprotocol/typescript-sdkkkk: Repository not found. Visit https://deepwiki.com/modelcontextprotocol/typescript-sdkkkk to index it.",
+    );
   });
 
   it("should handle pages that don't match structure order", () => {
@@ -154,13 +147,9 @@ Overview content.`;
 
     const content = `# Page: Overview
 
-Overview content.
+Overview content.# Page: Unexpected Page
 
-# Page: Unexpected Page
-
-This page wasn't in the structure.
-
-# Page: Installation
+This page wasn't in the structure.# Page: Installation
 
 Installation content.`;
 
@@ -180,17 +169,11 @@ Installation content.`;
 
     const content = `# Page: Overview
 
-Overview text.
+Overview text.# Page: Installation
 
-# Page: Installation
+Install steps.# Page: Configuration
 
-Install steps.
-
-# Page: Configuration
-
-Config details.
-
-# Page: Advanced
+Config details.# Page: Advanced
 
 Advanced topics.`;
 
@@ -243,13 +226,9 @@ Line 3 after blank line.`;
 
     const content = `# Page: Overview
 
-Overview content.
+Overview content.# Page: Extra Page 1
 
-# Page: Extra Page 1
-
-Extra content 1.
-
-# Page: Extra Page 2
+Extra content 1.# Page: Extra Page 2
 
 Extra content 2.`;
 

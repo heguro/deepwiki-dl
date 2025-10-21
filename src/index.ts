@@ -56,10 +56,10 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
   // Split by "# Page: " pattern (no newline before it)
   const pages = contents.split(/# Page: /);
 
-  // First element is usually empty or text before first page marker
+  // First element should be empty; if not, it's an error message
   if (pages[0].trim()) {
-    // If there's content before any page marker, include it
-    files.set("_preamble.md", pages[0].trim());
+    // Content before any page marker indicates an error (e.g., "Repository not found")
+    throw new Error(pages[0].trim());
   }
 
   // Track which section index we're at for matching
