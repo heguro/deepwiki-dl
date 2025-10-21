@@ -24,7 +24,7 @@ interface WikiSection {
  *   - 1.2 Core Concepts
  * - 2 Architecture
  */
-function parseWikiStructure(structureText: string): WikiStructure {
+export function parseWikiStructure(structureText: string): WikiStructure {
   const sections: WikiSection[] = [];
   const lines = structureText.split("\n");
 
@@ -50,7 +50,7 @@ function parseWikiStructure(structureText: string): WikiStructure {
  * The contents come in the format: # Page: [title]\n\n[content]
  * We need to match titles with the structure to get proper numbering
  */
-function splitWikiContents(contents: string, structure: WikiStructure): Map<string, string> {
+export function splitWikiContents(contents: string, structure: WikiStructure): Map<string, string> {
   const files = new Map<string, string>();
 
   // Split by "# Page: " pattern (no newline before it)
