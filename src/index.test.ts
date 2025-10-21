@@ -141,7 +141,7 @@ Setup content here.`;
     );
   });
 
-  it("should handle pages that don't match structure order", () => {
+  it("should not treat non-matching titles as page delimiters", () => {
     const structure = parseWikiStructure(`- 1 Overview
 - 2 Installation`);
 
@@ -155,10 +155,15 @@ Installation content.`;
 
     const result = splitWikiContents(content, structure);
 
-    expect(result.size).toBe(3);
+    // Should only create files for matching structure titles
+    expect(result.size).toBe(2);
     expect(result.has("1 Overview.md")).toBe(true);
-    expect(result.has("Unexpected Page.md")).toBe(true); // Falls back to title-only filename
     expect(result.has("2 Installation.md")).toBe(true);
+
+    // "Unexpected Page" should be included in Overview's content
+    const overviewContent = result.get("1 Overview.md");
+    expect(overviewContent).toContain("Overview content.# Page: Unexpected Page");
+    expect(overviewContent).toContain("This page wasn't in the structure.");
   });
 
   it("should handle nested section numbering", () => {
@@ -219,24 +224,5 @@ Line 3 after blank line.`;
     expect(result.get("1 Guide.md")).toBe(
       "# 1 Guide\n\nLine 1 of content.\nLine 2 of content.\n\nLine 3 after blank line.",
     );
-  });
-
-  it("should handle more pages than structure sections", () => {
-    const structure = parseWikiStructure("- 1 Overview");
-
-    const content = `# Page: Overview
-
-Overview content.# Page: Extra Page 1
-
-Extra content 1.# Page: Extra Page 2
-
-Extra content 2.`;
-
-    const result = splitWikiContents(content, structure);
-
-    expect(result.size).toBe(3);
-    expect(result.has("1 Overview.md")).toBe(true);
-    expect(result.has("Extra Page 1.md")).toBe(true); // Falls back to title-only
-    expect(result.has("Extra Page 2.md")).toBe(true); // Falls back to title-only
   });
 });

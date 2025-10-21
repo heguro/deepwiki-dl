@@ -49,52 +49,61 @@ export function parseWikiStructure(structureText: string): WikiStructure {
  * Split wiki contents into separate files based on structure
  * The contents come in the format: # Page: [title]\n\n[content]
  * We need to match titles with the structure to get proper numbering
+ * Only treat "# Page: [title]" as a delimiter if the title matches the next expected title in structure
  */
 export function splitWikiContents(contents: string, structure: WikiStructure): Map<string, string> {
   const files = new Map<string, string>();
 
-  // Split by "# Page: " pattern (no newline before it)
-  const pages = contents.split(/# Page: /);
+  // Handle empty content
+  if (!contents || contents.trim() === "") {
+    return files;
+  }
 
-  // First element should be empty; if not, it's an error message
-  if (pages[0].trim()) {
+  // Check if content starts with "# Page: " - if not, it's an error message
+  if (!contents.startsWith("# Page: ")) {
     // Content before any page marker indicates an error (e.g., "Repository not found")
-    throw new Error(pages[0].trim());
+    throw new Error(contents.trim());
   }
 
   // Track which section index we're at for matching
   let sectionIndex = 0;
+  let currentPos = 0;
 
-  // Process each page (skip first which was before any page marker)
-  for (let i = 1; i < pages.length; i++) {
-    const page = pages[i];
+  while (currentPos < contents.length && sectionIndex < structure.sections.length) {
+    const section = structure.sections[sectionIndex];
 
-    // Extract title from first line
-    const firstLineEnd = page.indexOf("\n");
-    if (firstLineEnd === -1) continue;
+    // Look for "# Page: " + section title
+    const marker = `# Page: ${section.title}`;
+    const markerPos = contents.indexOf(marker, currentPos);
 
-    const pageTitle = page.substring(0, firstLineEnd).trim();
-    const pageContent = page.substring(firstLineEnd + 1).trim();
-
-    // Try to match this title with structure
-    // The title in pages doesn't have numbers, but structure does
-    if (sectionIndex < structure.sections.length) {
-      const section = structure.sections[sectionIndex];
-
-      // Check if this page title matches the current section title
-      if (section.title === pageTitle) {
-        // Matched! Use the numbered filename
-        const filename = `${section.number} ${pageTitle}.md`;
-        files.set(filename, `# ${section.fullTitle}\n\n${pageContent}`);
-        sectionIndex++;
-      } else {
-        // Title doesn't match expected order, save with just the title
-        files.set(`${pageTitle}.md`, `# ${pageTitle}\n\n${pageContent}`);
-      }
-    } else {
-      // Ran out of structure sections, save with just the title
-      files.set(`${pageTitle}.md`, `# ${pageTitle}\n\n${pageContent}`);
+    if (markerPos === -1) {
+      // Expected section not found - we're done
+      break;
     }
+
+    // Find where this page's content ends (next matching "# Page: " or end of string)
+    const contentStart = markerPos + marker.length;
+    let contentEnd = contents.length;
+
+    // Look for the next valid page marker
+    for (let nextIdx = sectionIndex + 1; nextIdx < structure.sections.length; nextIdx++) {
+      const nextMarker = `# Page: ${structure.sections[nextIdx].title}`;
+      const nextPos = contents.indexOf(nextMarker, contentStart);
+      if (nextPos !== -1) {
+        contentEnd = nextPos;
+        break;
+      }
+    }
+
+    // Extract and clean the content
+    const pageContent = contents.substring(contentStart, contentEnd).trim();
+
+    // Save the file
+    const filename = `${section.number} ${section.title}.md`;
+    files.set(filename, `# ${section.fullTitle}\n\n${pageContent}`);
+
+    currentPos = contentEnd;
+    sectionIndex++;
   }
 
   return files;
