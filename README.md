@@ -7,18 +7,18 @@ Download deepwiki.com content as separate Markdown files using the deepwiki MCP 
 ```bash
 npm install -g @heguro/deepwiki-dl
 # or use with npx
-npx @heguro/deepwiki-dl <repoName> [outDir]
+npx @heguro/deepwiki-dl owner/repo [outDir]
 ```
 
 ## Usage
 
 ```bash
-deepwiki-dl <repoName> [outDir]
+deepwiki-dl owner/repo [outDir]
 ```
 
 ### Arguments
 
-- `repoName` - GitHub repository in format `owner/repo` (e.g., `modelcontextprotocol/typescript-sdk`)
+- `owner/repo` - GitHub repository (e.g., `modelcontextprotocol/typescript-sdk`)
 - `outDir` - Optional output directory. Defaults to `{repo-name}-deepwiki/`
 
 ### Examples
