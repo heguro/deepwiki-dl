@@ -181,7 +181,7 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
     for (const [filename, content] of files.entries()) {
       const filepath = path.join(outputDir, filename);
       fs.writeFileSync(filepath, content, "utf-8");
-      console.log(`✓ Saved ${filename}`);
+      console.log(`Saved ${filename}`);
     }
 
     console.log(`\nSuccessfully saved ${files.size} files to ${outputDir}`);
