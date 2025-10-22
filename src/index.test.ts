@@ -1,5 +1,42 @@
 import { describe, expect, it } from "vitest";
-import { parseWikiStructure, splitWikiContents } from "./index.js";
+import { parseWikiStructure, sanitizeFilename, splitWikiContents } from "./index.js";
+
+describe("sanitizeFilename", () => {
+  it("should replace Windows-invalid characters with dash", () => {
+    expect(sanitizeFilename("file<name>.md")).toBe("file-name-.md");
+    expect(sanitizeFilename("file>name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file:name.md")).toBe("file-name.md");
+    expect(sanitizeFilename('file"name.md')).toBe("file-name.md");
+    expect(sanitizeFilename("file/name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file\\name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file|name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file?name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file*name.md")).toBe("file-name.md");
+  });
+
+  it("should replace control characters (U+0000-U+001F) with dash", () => {
+    expect(sanitizeFilename("file\u0000name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file\u0001name.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file\u001Fname.md")).toBe("file-name.md");
+    expect(sanitizeFilename("file\tname.md")).toBe("file-name.md"); // tab is \u0009
+    expect(sanitizeFilename("file\nname.md")).toBe("file-name.md"); // newline is \u000A
+  });
+
+  it("should not modify valid filenames", () => {
+    expect(sanitizeFilename("valid-filename.md")).toBe("valid-filename.md");
+    expect(sanitizeFilename("file name with spaces.md")).toBe("file name with spaces.md");
+    expect(sanitizeFilename("file_name-123.md")).toBe("file_name-123.md");
+  });
+
+  it("should handle multiple invalid characters", () => {
+    expect(sanitizeFilename("file<>:name.md")).toBe("file---name.md");
+    expect(sanitizeFilename('file"|?*name.md')).toBe("file----name.md");
+  });
+
+  it("should handle empty string", () => {
+    expect(sanitizeFilename("")).toBe("");
+  });
+});
 
 describe("parseWikiStructure", () => {
   it("should parse a simple structure with top-level sections", () => {
@@ -223,5 +260,22 @@ Line 3 after blank line.`;
     expect(result.get("1 Guide.md")).toBe(
       "# 1 Guide\n\nLine 1 of content.\nLine 2 of content.\n\nLine 3 after blank line.",
     );
+  });
+
+  it("should sanitize filenames with invalid Windows characters", () => {
+    const structure = parseWikiStructure("- 1 Test:Title\n- 2 Another/Title");
+
+    const content = `# Page: Test:Title
+
+Content for test.# Page: Another/Title
+
+Content for another.`;
+
+    const result = splitWikiContents(content, structure);
+
+    expect(result.has("1 Test-Title.md")).toBe(true);
+    expect(result.has("2 Another-Title.md")).toBe(true);
+    expect(result.get("1 Test-Title.md")).toBe("# 1 Test:Title\n\nContent for test.");
+    expect(result.get("2 Another-Title.md")).toBe("# 2 Another/Title\n\nContent for another.");
   });
 });
