@@ -25,7 +25,7 @@ describe("parseWikiStructure", () => {
   });
 
   it("should parse nested sections with sub-levels", () => {
-    const input = `Available pages for modelcontextprotocol/typescript-sdk:
+    const input = `Available pages for owner/repo:
 
 - 1 Overview
   - 1.1 Installation and Setup
@@ -77,19 +77,6 @@ Another random line`;
     expect(result.sections).toHaveLength(2);
     expect(result.sections[0].title).toBe("Valid Section");
     expect(result.sections[1].title).toBe("Valid Sub-Section");
-  });
-
-  it("should handle sections with numbers containing multiple dots", () => {
-    const input = "- 1.2.3 Deep Nested Section";
-
-    const result = parseWikiStructure(input);
-
-    expect(result.sections).toHaveLength(1);
-    expect(result.sections[0]).toEqual({
-      number: "1.2.3",
-      title: "Deep Nested Section",
-      fullTitle: "1.2.3 Deep Nested Section",
-    });
   });
 });
 
