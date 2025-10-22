@@ -47,8 +47,7 @@ export function parseWikiStructure(structureText: string): WikiStructure {
 
 /**
  * Sanitize a filename by replacing characters that are invalid on Windows
- * Reference: https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
- * Replaces: < > : " / \ | ? * and control characters (U+0000-U+001F) with "-"
+ * @see https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
  */
 export function sanitizeFilename(filename: string): string {
   // biome-ignore lint/suspicious/noControlCharactersInRegex: Control characters are intentionally matched to sanitize filenames per Windows naming conventions
