@@ -145,6 +145,7 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
   try {
     // Connect to the MCP server
     console.log("Connecting to deepwiki MCP server...");
+    // @ts-expect-error https://github.com/modelcontextprotocol/typescript-sdk/issues/861
     await client.connect(transport);
 
     // Call read_wiki_structure
