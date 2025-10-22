@@ -3,7 +3,7 @@
 import { downloadWiki } from "./index.js";
 
 const args = process.argv.slice(2);
-const commandName = process.argv[1].split("/").pop() || "deepwiki-dl";
+const commandName = "deepwiki-dl";
 
 if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
   console.log(`Usage: ${commandName} owner/repo [outDir]
