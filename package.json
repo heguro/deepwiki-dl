@@ -16,7 +16,12 @@
     "format": "biome format --write .",
     "prepublishOnly": "pnpm run build"
   },
-  "keywords": ["deepwiki", "mcp", "documentation", "markdown"],
+  "keywords": [
+    "deepwiki",
+    "mcp",
+    "documentation",
+    "markdown"
+  ],
   "author": "",
   "license": "CC0-1.0",
   "packageManager": "pnpm@10.19.0",
@@ -24,7 +29,7 @@
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.2.7",
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
