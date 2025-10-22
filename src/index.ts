@@ -46,7 +46,9 @@ export function parseWikiStructure(structureText: string): WikiStructure {
 }
 
 /**
- * Replace invalid characters in a filename with "-"
+ * Sanitize invalid characters in a filename by replacing them with "-"
+ * @internal For internal use only
+ * @private
  * @see https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
  */
 export function replaceInvalidFilenameCharacters(filename: string): string {
