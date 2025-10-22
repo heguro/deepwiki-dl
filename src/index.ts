@@ -62,15 +62,13 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
   // Check if content starts with "# Page: " - if not, it's an error message
   if (!contents.startsWith("# Page: ")) {
     // Content before any page marker indicates an error (e.g., "Repository not found")
-    throw new Error(
-      `Invalid content format - expected content to start with "# Page: ":\n${contents.trim()}`,
-    );
+    throw new Error(`Invalid content format\n${contents.trim()}`);
   }
 
   // Check if structure has any sections - if not, it's an error
   if (structure.sections.length === 0) {
     // No sections in structure indicates an error
-    throw new Error(`No sections found in wiki structure:\n${contents.trim()}`);
+    throw new Error(`Invalid structure format\n${contents.trim()}`);
   }
 
   // Track which section index we're at for matching
