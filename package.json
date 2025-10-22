@@ -22,8 +22,16 @@
     "documentation",
     "markdown"
   ],
-  "author": "",
+  "author": "heguro",
   "license": "CC0-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heguro/deepwiki-dl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/heguro/deepwiki-dl/issues"
+  },
+  "homepage": "https://github.com/heguro/deepwiki-dl",
   "packageManager": "pnpm@10.19.0",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.20.1"
