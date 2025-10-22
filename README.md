@@ -4,16 +4,11 @@ Download deepwiki.com content as separate Markdown files using the deepwiki MCP 
 
 ## Why?
 
-The deepwiki MCP server provides two tools:
-- `read_wiki_structure` - Returns a list of documentation topics
-- `read_wiki_contents` - Returns all documentation as a single string
-
-The `read_wiki_contents` tool returns all pages concatenated together with `# Page: [title]` delimiters (without newlines before them). This makes it difficult to work with individual pages.
+The deepwiki MCP server's `read_wiki_contents` tool returns all pages concatenated together with `# Page: [title]` delimiters (without newlines before them). This bursts coding AI's context usage.
 
 This tool splits the combined content into separate, properly numbered Markdown files based on the structure, making it easier to:
-- Browse documentation offline
-- Search and edit individual pages
-- Use with local tools and editors
+- Read only the parts you (the AI) want
+- Minimize context usage
 
 ## Installation
 
