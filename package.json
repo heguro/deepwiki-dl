@@ -1,6 +1,6 @@
 {
   "name": "@heguro/deepwiki-dl",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Download deepwiki.com content as separate Markdown files",
   "main": "dist/index.js",
   "bin": {
