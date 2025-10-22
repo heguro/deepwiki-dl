@@ -128,6 +128,18 @@ Setup content here.`;
     );
   });
 
+  it("should throw error when structure has no sections", () => {
+    const structure = parseWikiStructure("No list items here");
+
+    const content = `# Page: Overview
+
+Some content here.`;
+
+    expect(() => splitWikiContents(content, structure)).toThrow(
+      "# Page: Overview\n\nSome content here.",
+    );
+  });
+
   it("should not treat non-matching titles as page delimiters", () => {
     const structure = parseWikiStructure(`- 1 Overview
 - 2 Installation`);

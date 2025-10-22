@@ -65,6 +65,12 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
     throw new Error(contents.trim());
   }
 
+  // Check if structure has any sections - if not, it's an error
+  if (structure.sections.length === 0) {
+    // No sections in structure indicates an error
+    throw new Error(contents.trim());
+  }
+
   // Track which section index we're at for matching
   let sectionIndex = 0;
   let currentPos = 0;
