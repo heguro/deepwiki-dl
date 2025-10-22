@@ -135,7 +135,7 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
   const client = new Client(
     {
       name: "deepwiki-dl",
-      version: "1.0.0",
+      version: "0.0.1",
     },
     {
       capabilities: {},
