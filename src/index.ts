@@ -46,10 +46,10 @@ export function parseWikiStructure(structureText: string): WikiStructure {
 }
 
 /**
- * Sanitize a filename by replacing characters that are invalid on Windows
+ * Replace invalid characters in a filename with "-"
  * @see https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
  */
-export function sanitizeFilename(filename: string): string {
+export function replaceInvalidFilenameCharacters(filename: string): string {
   // biome-ignore lint/suspicious/noControlCharactersInRegex: Control characters are intentionally matched to sanitize filenames per Windows naming conventions
   return filename.replace(/[<>:"/\\|?*\u0000-\u001F]/g, "-");
 }
@@ -114,7 +114,7 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
     const pageContent = contents.substring(contentStart, contentEnd).trim();
 
     // Save the file
-    const filename = sanitizeFilename(`${section.number} ${section.title}.md`);
+    const filename = replaceInvalidFilenameCharacters(`${section.number} ${section.title}.md`);
     files.set(filename, `# ${section.fullTitle}\n\n${pageContent}`);
 
     currentPos = contentEnd;
