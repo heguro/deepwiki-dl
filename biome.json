@@ -19,5 +19,10 @@
     "formatter": {
       "enabled": true
     }
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "defaultBranch": "main"
   }
 }
