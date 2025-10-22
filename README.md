@@ -2,6 +2,8 @@
 
 Download deepwiki.com content as separate Markdown files using the deepwiki MCP server.
 
+> **Note:** This is an unofficial tool. The deepwiki MCP server's behavior may change at any time, which could break this tool's functionality.
+
 ## Why?
 
 The deepwiki MCP server's `read_wiki_contents` tool returns all pages concatenated together with `# Page: [title]` delimiters (without newlines before them). This bursts coding AI's context usage.
