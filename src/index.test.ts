@@ -124,7 +124,7 @@ Setup content here.`;
       "Error fetching wiki for someNotFoundRepo: Repository not found. Visit https://deepwiki.com/someNotFoundRepo to index it.";
 
     expect(() => splitWikiContents(content, structure)).toThrow(
-      "Error fetching wiki for someNotFoundRepo: Repository not found. Visit https://deepwiki.com/someNotFoundRepo to index it.",
+      `Invalid content format - expected content to start with "# Page: ":\n${content}`,
     );
   });
 
@@ -136,7 +136,7 @@ Setup content here.`;
 Some content here.`;
 
     expect(() => splitWikiContents(content, structure)).toThrow(
-      "# Page: Overview\n\nSome content here.",
+      `No sections found in wiki structure:\n${content}`,
     );
   });
 
