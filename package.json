@@ -1,0 +1,37 @@
+{
+  "name": "@heguro/deepwiki-dl",
+  "version": "0.0.1",
+  "description": "Download deepwiki.com content as separate Markdown files",
+  "main": "dist/index.js",
+  "bin": {
+    "deepwiki-dl": "dist/cli.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "deepwiki",
+    "mcp",
+    "documentation",
+    "markdown"
+  ],
+  "author": "",
+  "license": "CC0-1.0",
+  "packageManager": "pnpm@10.19.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.7",
+    "@types/node": "^22.18.12",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
