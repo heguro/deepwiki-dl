@@ -65,12 +65,6 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
     throw new Error(`Invalid content format\n${contents.trim()}`);
   }
 
-  // Check if structure has any sections - if not, it's an error
-  if (structure.sections.length === 0) {
-    // No sections in structure indicates an error
-    throw new Error(`Invalid structure format\n${contents.trim()}`);
-  }
-
   // Track which section index we're at for matching
   let sectionIndex = 0;
   let currentPos = 0;
@@ -165,14 +159,16 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
         .map((c) => c.text ?? "")
         .join("\n") || "";
 
-    // Save structure file
-    const structureFile = path.join(outputDir, "_wiki_structure.md");
-    fs.writeFileSync(structureFile, structureText, "utf-8");
-    console.log(`Saved structure to ${structureFile}`);
-
     // Parse structure
     const structure = parseWikiStructure(structureText);
     console.log(`Found ${structure.sections.length} sections`);
+
+    // Error if no sections found
+    if (structure.sections.length === 0) {
+      throw new Error(
+        `No sections found in wiki structure for ${repoName}\n${structureText.trim()}`,
+      );
+    }
 
     // Call read_wiki_contents
     console.log("Fetching wiki contents...");
@@ -193,6 +189,11 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
 
     // Split and save files
     const files = splitWikiContents(contentsText, structure);
+
+    // Save structure file only after both structure and contents are validated
+    const structureFile = path.join(outputDir, "_wiki_structure.md");
+    fs.writeFileSync(structureFile, structureText, "utf-8");
+    console.log(`Saved structure to ${structureFile}`);
 
     for (const [filename, content] of files.entries()) {
       const filepath = path.join(outputDir, filename);
