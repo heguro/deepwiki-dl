@@ -65,6 +65,13 @@ describe("parseWikiStructure", () => {
     expect(result.rawText).toBe("");
   });
 
+  it("should parse structure with no matching sections", () => {
+    // This returns an empty sections array, which downloadWiki will reject
+    const result = parseWikiStructure("No list items here");
+    expect(result.sections).toHaveLength(0);
+    expect(result.rawText).toBe("No list items here");
+  });
+
   it("should ignore lines that don't match the pattern", () => {
     const input = `Some header text
 - 1 Valid Section
@@ -125,18 +132,6 @@ Setup content here.`;
 
     expect(() => splitWikiContents(content, structure)).toThrow(
       `Invalid content format\n${content}`,
-    );
-  });
-
-  it("should throw error when structure has no sections", () => {
-    const structure = parseWikiStructure("No list items here");
-
-    const content = `# Page: Overview
-
-Some content here.`;
-
-    expect(() => splitWikiContents(content, structure)).toThrow(
-      `Invalid structure format\n${content}`,
     );
   });
 
