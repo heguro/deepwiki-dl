@@ -165,7 +165,9 @@ export async function downloadWiki(repoName: string, outDir?: string): Promise<v
 
     // Error if no sections found
     if (structure.sections.length === 0) {
-      throw new Error(`No sections found in wiki structure for ${repoName}`);
+      throw new Error(
+        `No sections found in wiki structure for ${repoName}\n${structureText.trim()}`,
+      );
     }
 
     // Call read_wiki_contents
