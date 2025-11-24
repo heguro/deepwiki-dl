@@ -46,6 +46,16 @@ export function parseWikiStructure(structureText: string): WikiStructure {
 }
 
 /**
+ * Sanitize invalid characters in a filename by replacing them with "-"
+ * @internal
+ * @see https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
+ */
+export function replaceInvalidFilenameCharacters(filename: string): string {
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: Control characters are intentionally matched to sanitize filenames per Windows naming conventions
+  return filename.replace(/[<>:"/\\|?*\u0000-\u001F]/g, "-");
+}
+
+/**
  * Split wiki contents into separate files based on structure
  * The contents come in the format: # Page: [title]\n\n[content]
  * We need to match titles with the structure to get proper numbering
@@ -99,7 +109,7 @@ export function splitWikiContents(contents: string, structure: WikiStructure): M
     const pageContent = contents.substring(contentStart, contentEnd).trim();
 
     // Save the file
-    const filename = `${section.number} ${section.title}.md`;
+    const filename = replaceInvalidFilenameCharacters(`${section.number} ${section.title}.md`);
     files.set(filename, `# ${section.fullTitle}\n\n${pageContent}`);
 
     currentPos = contentEnd;
